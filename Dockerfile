@@ -25,7 +25,7 @@ RUN wget -q https://storage.googleapis.com/golang/$GOREL && \
     rm -f $GOREL
 
 
-# Install Quorum 2.1.1
+# Install Quorum 2.1.1 & Swarm 1.7.2-stable
 
 RUN git clone https://github.com/jpmorganchase/quorum.git && \
     cd quorum && \
@@ -35,6 +35,10 @@ RUN git clone https://github.com/jpmorganchase/quorum.git && \
     cp build/bin/bootnode /usr/local/bin && \
     cd .. && \
     rm -rf quorum
+
+# Install Swarm
+    cp build/bin/swarm /usr/local/bin
+
 
 # Install Java 8
 RUN apt-get update
