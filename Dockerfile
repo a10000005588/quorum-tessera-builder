@@ -79,3 +79,8 @@ RUN rm -r /workspace/tessera && \
     mkdir /workspace/tessera/app && \
     mv /workspace/tessera-app-0.8-SNAPSHOT-app.jar /workspace/tessera/app
 
+COPY setup.sh /workspace
+RUN  mkdir /workspace/lib
+COPY lib /workspace/lib
+
+CMD ["/setup.sh"]
