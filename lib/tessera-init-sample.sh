@@ -1,5 +1,7 @@
 echo "[*] Initialising Tessera configuration"
 
+echo "[*] $node_tessera_port"
+
 currentDir=$(pwd)
 currentTesseraDir="${currentDir}/tessera"
     DDIR="${currentTesseraDir}/tdata"
@@ -32,9 +34,9 @@ currentTesseraDir="${currentDir}/tessera"
         "url": "jdbc:h2:${DDIR}/db$;MODE=Oracle;TRACE_LEVEL_SYSTEM_OUT=0"
     },
     "server": {
-        "port": 9000,
-        "hostName": "http://<node public ip>",   // add your node's public ip
-        "bindingAddress": "http://0.0.0.0:9000",
+        "port": $node_tessera_port,
+        "hostName": "http://$node_IP_address",  
+        "bindingAddress": "http://0.0.0.0:$node_tessera_port",
         "sslConfig": {
             "tls": "OFF",
             "generateKeyStoreIfNotExisted": true,
@@ -52,23 +54,17 @@ currentTesseraDir="${currentDir}/tessera"
             "knownServersFile": "${DDIR}/knownServers"
         }
     },
-    "peer": [ // setting your peer's public ip 
+    "peer": [
         {
-            "url": "http://<node1 public ip>:9000"
-        },
-        {
-            "url": "http://<node2 public ip>:9000"
-        },
-        {
-            "url": "http://<node3 public ip>:9000"
+            "url": "http://$node_IP_address:$node_tessera_port"
         }
     ],
     "keys": {
         "passwords": [],
         "keyData": [
-            {   // if the node index is 1, modify <node-index> here with  node1  
-                "privateKeyPath": "${DDIR}/tessera-key/<node-index>/tm.key",
-                "publicKeyPath": "${DDIR}/tessera-key/<node-index>/tm.pub"
+            {   
+                "privateKeyPath": "${DDIR}/keys/tm.key",
+                "publicKeyPath": "${DDIR}/keys/tm.pub"
             }
         ]
     },
