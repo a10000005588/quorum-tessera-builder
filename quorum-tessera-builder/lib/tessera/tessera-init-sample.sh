@@ -1,7 +1,5 @@
 echo "[*] Initialising Tessera configuration"
 
-echo "[*] $node_tessera_port"
-
 currentDir=$(pwd)
 currentTesseraDir="${currentDir}/tessera"
     DDIR="${currentTesseraDir}/tdata"
@@ -10,7 +8,7 @@ currentTesseraDir="${currentDir}/tessera"
     mkdir -p ${DDIR}/keys
     echo "[*] Generating your Tessera Public Key and Private Key"
 
-    java -jar ${currentTesseraDir}/app/tessera-app-0.8-SNAPSHOT-app.jar -keygen -filename tm
+    java -jar ${currentTesseraDir}/app/tessera-app-0.9-SNAPSHOT-app.jar -keygen -filename tm
    
     mv -t ${DDIR}/keys tm.pub tm.key 
     

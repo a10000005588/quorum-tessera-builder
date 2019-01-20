@@ -32,13 +32,10 @@ RUN git clone https://github.com/jpmorganchase/quorum.git && \
     git checkout tags/v2.1.1 && \
     make all && \
     cp build/bin/geth /usr/local/bin && \
+    cp build/bin/swarm /usr/local/bin && \
     cp build/bin/bootnode /usr/local/bin && \
     cd .. && \
     rm -rf quorum
-
-# Install Swarm
-    cp build/bin/swarm /usr/local/bin
-
 
 # Install Java 8
 RUN apt-get update
@@ -73,14 +70,13 @@ RUN git clone https://github.com/jpmorganchase/tessera.git && \
     cd tessera && \
     mvn install -DskipTests
 
-RUN mv /workspace/tessera/tessera-app/target/tessera-app-0.8-SNAPSHOT-app.jar /workspace
+RUN mv /workspace/tessera/tessera-app/target/tessera-app-0.9-SNAPSHOT-app.jar /workspace
 RUN rm -r /workspace/tessera && \
     mkdir /workspace/tessera && \
     mkdir /workspace/tessera/app && \
-    mv /workspace/tessera-app-0.8-SNAPSHOT-app.jar /workspace/tessera/app
+    mv /workspace/tessera-app-0.9-SNAPSHOT-app.jar /workspace/tessera/app
 
-COPY setup.sh /workspace
 RUN  mkdir /workspace/lib
 COPY lib /workspace/lib
+COPY menu.sh /workspace
 
-CMD ["/setup.sh"]

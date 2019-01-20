@@ -1,4 +1,3 @@
-
 echo "####################################"
 echo "#  Start Setting Your Quorum Node  #"
 echo "####################################"
@@ -9,7 +8,6 @@ rm genesis.json
 
 node_name="node"
 rm -rf $node_name
-rm node*
 rm nohup.out
 
 currentDir=$(pwd)
@@ -19,6 +17,10 @@ export currentTesseraDir
 
 echo "[*] Please enter the IP address of this node:"
 read node_IP_address
+
+echo "#################################################################"
+echo "#   Suggestion: Setting Your Port Number between 22000-22010    #"
+echo "#################################################################"
 
 echo "[*] Please enter RPC port [default:22000]:"
 read node_rpc_port
@@ -62,7 +64,6 @@ if ["${node_ws_port}" == ""]; then
     node_ws_port=22005
 fi
 
-
 export node_tessera_port
 export node_IP_address
 
@@ -70,7 +71,7 @@ echo "#############################################"
 echo "#        Create Tessera Key Pair            #"
 echo "#############################################"
 
-cp $currentDir/lib/tessera-init-sample.sh $currentDir/tessera
+cp $currentDir/lib/tessera/tessera-init-sample.sh $currentDir/tessera
 . $currentDir/tessera/tessera-init-sample.sh
 
 echo "#########################################"
@@ -79,7 +80,7 @@ echo "#########################################"
 
 rm -rf $currentDir/$node_name
 
-cp $currentDir/lib/genesis_sample.json $currentDir
+cp $currentDir/lib/quorum/genesis_sample.json $currentDir
 mv $currentDir/genesis_sample.json $currentDir/genesis.json
 
 mkdir $currentDir/$node_name
@@ -106,18 +107,18 @@ EOF
 cd $currentDir
 geth --datadir $node_name init $currentDir/genesis.json
 
-
-
 sleep 2
 
 echo "[*] Start tessera services... "
-nohup java -jar $currentTesseraDir/app/tessera-app-0.8-SNAPSHOT-app.jar -configfile $currentTesseraDir/tdata/tessera-config.json >> $currentTesseraDir/tdata/logs/tessera.log 2>&1 &
+nohup java -jar $currentTesseraDir/app/tessera-app-0.9-SNAPSHOT-app.jar -configfile $currentTesseraDir/tdata/tessera-config.json >> $currentTesseraDir/tdata/logs/tessera.log 2>&1 &
 
 sleep 15
 
 echo "[*] Start quorum network... "
 
-PRIVATE_CONFIG=$currentTesseraDir/tdata/tm.ipc nohup geth --datadir $node_name --nodiscover --verbosity 5 --networkid 31337 --raft --raftport $node_raft_port --rpc --rpcaddr 0.0.0.0 --rpcport $node_rpc_port --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft --emitcheckpoints --port $node_manager_port 2>>node.log &
+mkdir $currentDir/$node_name/logs
+
+PRIVATE_CONFIG=$currentTesseraDir/tdata/tm.ipc nohup geth --datadir $node_name --nodiscover --verbosity 5 --networkid 31337 --raft --raftport $node_raft_port --rpc --rpcaddr 0.0.0.0 --rpcport $node_rpc_port --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,raft --emitcheckpoints --port $node_manager_port 2>>$currentDir/$node_name/logs/node.log &
 
 sleep 5
 
